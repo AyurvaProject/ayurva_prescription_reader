@@ -1,5 +1,6 @@
 {
   "name": "prescription_reader",
+  "homepage": "https://sandani-muthunayaka.github.io/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist -r https://sandani-muthunaaka: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@github.com/AyurvaProject/ayurva_prescription_reader.git"
   },
   "dependencies": {
     "react": "^19.0.0",
