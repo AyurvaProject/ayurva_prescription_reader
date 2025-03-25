@@ -53,10 +53,20 @@ const Layout = () => {
     <div>
       <Toolbar />
       {/* <Divider /> */}
-      <List sx={{ paddingLeft: 5 }}>
+      <List>
         {menuItems.map((item) => (
           <ListItem key={item.text} disablePadding>
-            <ListItemButton onClick={() => navigate(item.path)}>
+            <ListItemButton
+              sx={{
+                color: "black",
+                borderRadius: 2,
+                transition: "background-color 0.3s ease-in-out",
+                "&:hover": {
+                  backgroundColor: "blue", // Change background color to blue on hover
+                },
+              }}
+              onClick={() => navigate(item.path)}
+            >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
             </ListItemButton>
@@ -67,7 +77,7 @@ const Layout = () => {
   );
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", minWidth: "100%" }}>
       <CssBaseline />
 
       {/* Sidebar Drawer */}
@@ -89,11 +99,15 @@ const Layout = () => {
       >
         <Box
           sx={{
-            width: "100%",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            justifyContent: " center",
+            justifyContent: "Flex-start",
+            bgcolor: "white",
+            borderRadius: 5,
+            boxShadow: 5,
+            margin: "5%",
+            height: "100%",
           }}
         >
           <Avatar
@@ -113,12 +127,21 @@ const Layout = () => {
           >
             Ayurva
           </Typography>
+          <Divider />
+          {drawer}
         </Box>
-        {drawer}
       </Drawer>
 
       {/* Main Content */}
-      <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          minWidth: "80%",
+          maxWidth: "100%",
+        }}
+      >
         <AppBar
           position="fixed"
           //   color="primary"
@@ -140,9 +163,14 @@ const Layout = () => {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h5" noWrap component="div">
+            <Typography
+              variant="h5"
+              color="black"
+              sx={{ alignContent: "center", alignItems: "flex-start" }}
+            >
               List of the Requests
             </Typography>
+
             <Button
               endIcon={<LogoutIcon />}
               sx={{ ml: "auto", textTransform: "none" }}
@@ -153,8 +181,11 @@ const Layout = () => {
           </Toolbar>
         </AppBar>
 
-        <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
-          <Outlet />
+        <Box
+          component="main"
+          sx={{ flexGrow: 1, p: 3, mt: 8, minWidth: "100%" }}
+        >
+          <Outlet style={{ maxWidth: "100%" }} />
         </Box>
       </Box>
     </Box>
