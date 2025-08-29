@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import { Outlet } from "react-router-dom";
 import {
   AppBar,
@@ -19,33 +19,71 @@ import {
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTheme } from "@mui/material";
 import ListIcon from "@mui/icons-material/List";
 import MenuIcon from "@mui/icons-material/Menu";
 import DescriptionIcon from "@mui/icons-material/Description";
-
-// const logo = require("../../assets/img/logo.png").default;
 import logo from "../../assets/img/logo.png";
 import LogoutIcon from "@mui/icons-material/Logout";
+import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
+import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
+import VaccinesIcon from "@mui/icons-material/Vaccines";
+import { GetCurrentUser } from "../../apis/auth/Auth";
+import { useAuth } from "../../context/AuthContext";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
+import LibraryAddCheckIcon from "@mui/icons-material/LibraryAddCheck";
+import BlockIcon from "@mui/icons-material/Block";
 
 const drawerWidth = 300;
 
 const Layout = () => {
+  const { logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [user, setUser] = useState({});
   const navigate = useNavigate();
   const theme = useTheme();
+
+  const getUser = async () => {
+    const user = await GetCurrentUser();
+    setUser(user);
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
   const menuItems = [
-    { text: "Request List", icon: <ListIcon />, path: "/" },
     {
-      text: "RequestDetails",
-      icon: <DescriptionIcon />,
-      path: "/requestDetails",
+      text: "Dashboard",
+      icon: <SpaceDashboardIcon />,
+      path: "/",
+    },
+    {
+      text: "Prescription Requests",
+      icon: <ChecklistIcon />,
+      path: "/allPendingPrescriptions",
+    },
+    {
+      text: "Pending Prescriptions",
+      icon: <PendingActionsIcon />,
+      path: "/myPendingPrescriptions",
+    },
+    {
+      text: "Completed Prescriptions",
+      icon: <LibraryAddCheckIcon />,
+      path: `/myReadPrescriptions`,
+    },
+    {
+      text: "Rejected Prescriptions",
+      icon: <BlockIcon />,
+      path: `/pharmacy/edit`,
     },
   ];
 
@@ -62,13 +100,14 @@ const Layout = () => {
                 borderRadius: 2,
                 transition: "background-color 0.3s ease-in-out",
                 "&:hover": {
-                  backgroundColor: "blue", // Change background color to blue on hover
+                  backgroundColor: "#004aad", // Change background color to blue on hover
+                  color: "white",
                 },
               }}
               onClick={() => navigate(item.path)}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
+              <ListItemText primary={item.text} sx={{ fontSize: 10 }} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -153,7 +192,7 @@ const Layout = () => {
             color: theme.palette.text.layoutSecondary,
           }}
         >
-          <Toolbar>
+          <Toolbar sx={{ bgcolor: "white" }}>
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -168,13 +207,13 @@ const Layout = () => {
               color="black"
               sx={{ alignContent: "center", alignItems: "flex-start" }}
             >
-              List of the Requests
+              Prescription Reader Dashboard
             </Typography>
 
             <Button
               endIcon={<LogoutIcon />}
               sx={{ ml: "auto", textTransform: "none" }}
-              onClick={() => navigate("/login")}
+              onClick={() => logout()}
             >
               Logout
             </Button>
