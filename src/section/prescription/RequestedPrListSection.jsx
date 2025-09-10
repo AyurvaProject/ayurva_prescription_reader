@@ -14,10 +14,12 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CustomSnackbar from "../../component/snackbar/CustomSnackbar";
+import LoadingSection from "../loading/LoadingSection";
 const RequestedPrListSection = () => {
   const navigate = useNavigate();
   const [prescriptions, setPrescriptions] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [assigning, setAssigning] = useState(false);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -47,6 +49,7 @@ const RequestedPrListSection = () => {
   }, []);
 
   const assignPr = async (id) => {
+    setLoading(true);
     try {
       await AssignPrForPrescriptiption(id);
       showSnackbar("success", false, "Prescription assigned successfully");
@@ -56,6 +59,8 @@ const RequestedPrListSection = () => {
       });
     } catch (error) {
       showSnackbar("error", false, error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -131,7 +136,7 @@ const RequestedPrListSection = () => {
         <Button
           variant="contained"
           color="primary"
-          disabled={params.row.active === false}
+          disabled={params.row.active === false || assigning}
           size="small"
           onClick={() => {
             assignPr(params.row.id);
@@ -153,7 +158,7 @@ const RequestedPrListSection = () => {
   }));
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingSection />;
   }
 
   return (

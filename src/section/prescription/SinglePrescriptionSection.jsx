@@ -16,12 +16,15 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
+import InfoIcon from "@mui/icons-material/Info";
+import { GetCurrentUser } from "../../apis/auth/Auth";
 import {
   GetOnePres,
   AssignPrForPrescriptiption,
 } from "../../apis/prescription/Prescription";
 import CustomSnackbar from "../../component/snackbar/CustomSnackbar";
 import PrescriptionDetailListSection from "./PrescriptionDetailListSection";
+import LoadingSection from "../loading/LoadingSection";
 
 const SinglePrescriptionSection = ({ id, refreshPendingList }) => {
   const [pres, setPres] = useState(null);
@@ -71,18 +74,7 @@ const SinglePrescriptionSection = ({ id, refreshPendingList }) => {
   };
 
   if (loading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "50vh",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
+    return <LoadingSection />;
   }
 
   return (
@@ -101,16 +93,26 @@ const SinglePrescriptionSection = ({ id, refreshPendingList }) => {
         </Typography>
         <Stack direction="row" spacing={2}>
           <Button
-            variant="outlined"
+            variant="contained"
             color="primary"
             onClick={assignPr}
-            disabled={assigning}
+            disabled={
+              assigning ||
+              pres.pr_id != null ||
+              !GetCurrentUser() ||
+              !pres.pres_active_status
+            }
           >
             {assigning ? "Assigning..." : "Assign to Me"}
           </Button>
-          <Button variant="contained" color="primary">
+          {/* <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {}}
+            disabled={GetCurrentUser()?.id != pres.pr_id || !GetCurrentUser()}
+          >
             Read
-          </Button>
+          </Button> */}
         </Stack>
       </Box>
       <Divider sx={{ mb: 3 }} />
@@ -176,6 +178,12 @@ const SinglePrescriptionSection = ({ id, refreshPendingList }) => {
               <PhoneIcon fontSize="small" />
               <Typography variant="body2">{pres.user.user_contact}</Typography>
             </Stack>
+            {pres.pres_description && (
+              <Stack direction="row" spacing={1} alignItems="center" mt={1}>
+                <InfoIcon fontSize="small" />
+                <Typography variant="body2">{pres.pres_description}</Typography>
+              </Stack>
+            )}
             <Divider sx={{ my: 2 }} />
             <Typography variant="body2" color="text.secondary">
               Uploaded on: {pres.pres_uploaded_date} at{" "}

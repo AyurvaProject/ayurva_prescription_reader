@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CustomSnackbar from "../../component/snackbar/CustomSnackbar";
+import LoadingSection from "../loading/LoadingSection";
 const ReadPrListSection = () => {
   const navigate = useNavigate();
   const [prescriptions, setPrescriptions] = useState([]);
@@ -137,7 +138,7 @@ const ReadPrListSection = () => {
   }));
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingSection />;
   }
 
   return (

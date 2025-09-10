@@ -7,6 +7,7 @@ import {
 import { GetAllProducts } from "../../apis/product/Products";
 import { useParams } from "react-router-dom";
 import PrescriptionFormSection from "../../section/prescription/PrescriptionDetailFormSection";
+import LoadingSection from "../../section/loading/LoadingSection";
 
 const PrescriptionDetailAddEdit = () => {
   const { pres_detail_id, pres_id } = useParams();
@@ -42,7 +43,7 @@ const PrescriptionDetailAddEdit = () => {
   };
 
   if (isLoading || isProductLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSection />;
   }
   return (
     <PrescriptionFormSection

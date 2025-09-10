@@ -80,11 +80,11 @@ const Layout = () => {
       icon: <LibraryAddCheckIcon />,
       path: `/myReadPrescriptions`,
     },
-    {
-      text: "Rejected Prescriptions",
-      icon: <BlockIcon />,
-      path: `/pharmacy/edit`,
-    },
+    // {
+    //   text: "Rejected Prescriptions",
+    //   icon: <BlockIcon />,
+    //   path: `/pharmacy/edit`,
+    // },
   ];
 
   const drawer = (
@@ -205,7 +205,13 @@ const Layout = () => {
             <Typography
               variant="h5"
               color="black"
-              sx={{ alignContent: "center", alignItems: "flex-start" }}
+              sx={{
+                mt: 1,
+                background: "linear-gradient(45deg, #004aad, #38b6ff)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                fontWeight: 650,
+              }}
             >
               Prescription Reader Dashboard
             </Typography>

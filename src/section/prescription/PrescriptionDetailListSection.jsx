@@ -7,6 +7,7 @@ import {
   ChangePrescriptionStatus,
   GetOnePres,
 } from "../../apis/prescription/Prescription";
+import { GetCurrentUser } from "../../apis/auth/Auth";
 import DataGridComponent from "../../component/datagrid/DataGrid";
 import {
   Box,
@@ -18,6 +19,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CustomSnackbar from "../../component/snackbar/CustomSnackbar";
+import LoadingSection from "../loading/LoadingSection";
 
 const PrescriptionDetailListSection = ({ id }) => {
   const navigate = useNavigate();
@@ -88,6 +90,13 @@ const PrescriptionDetailListSection = ({ id }) => {
             onClick={() => {
               navigate(`/prescriptionDetail/edit/${id}/${params.row.id}`);
             }}
+            disabled={
+              isDeleting ||
+              prescription.pres_status !== "pending" ||
+              !prescription.pres_active_status ||
+              !GetCurrentUser() ||
+              GetCurrentUser()?.id !== prescription.pr_id
+            }
           >
             Edit
           </Button>
@@ -98,7 +107,13 @@ const PrescriptionDetailListSection = ({ id }) => {
             onClick={() => {
               handleDelete(params.row.id);
             }}
-            disabled={isDeleting}
+            disabled={
+              isDeleting ||
+              prescription.pres_status !== "pending" ||
+              !prescription.pres_active_status ||
+              !GetCurrentUser() ||
+              GetCurrentUser()?.id !== prescription.pr_id
+            }
           >
             Delete
           </Button>
@@ -152,7 +167,7 @@ const PrescriptionDetailListSection = ({ id }) => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSection />;
   }
   return (
     <Box sx={{ width: "100%" }}>
@@ -172,7 +187,11 @@ const PrescriptionDetailListSection = ({ id }) => {
             color="primary"
             onClick={() => navigate(`/prescriptionDetail/add/${id}`)}
             disabled={
-              isStatusUpdating || prescription.pres_status !== "pending"
+              isStatusUpdating ||
+              prescription.pres_status !== "pending" ||
+              !GetCurrentUser() ||
+              GetCurrentUser()?.id !== prescription.pr_id ||
+              !prescription.pres_active_status
             }
           >
             Add Product Info
@@ -183,7 +202,10 @@ const PrescriptionDetailListSection = ({ id }) => {
             disabled={
               prescriptionDetails.length === 0 ||
               isStatusUpdating ||
-              prescription.pres_status !== "pending"
+              prescription.pres_status !== "pending" ||
+              !GetCurrentUser() ||
+              GetCurrentUser()?.id !== prescription.pr_id ||
+              !prescription.pres_active_status
             }
             onClick={() => handleStatusChange(id, "read")}
             startIcon={isStatusUpdating ? <CircularProgress size={20} /> : null}
